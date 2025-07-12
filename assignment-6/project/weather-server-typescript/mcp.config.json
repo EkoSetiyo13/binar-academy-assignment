@@ -1,0 +1,14 @@
+{
+    "command": "node",
+    "args": [
+        "build/index.js"
+    ],
+    "env": {
+        "HOME": "/Users/ekosbp",
+        "LOGNAME": "ekosbp",
+        "PATH": "/Users/ekosbp/.npm/_npx/5a9d879542beca3a/node_modules/.bin:/Users/ekosbp/Documents/Personal/Binar-Academy/assignment/assignment-6/quickstart-resources/weather-server-typescript/node_modules/.bin:/Users/ekosbp/Documents/Personal/Binar-Academy/assignment/assignment-6/quickstart-resources/node_modules/.bin:/Users/ekosbp/Documents/Personal/Binar-Academy/assignment/assignment-6/node_modules/.bin:/Users/ekosbp/Documents/Personal/Binar-Academy/assignment/node_modules/.bin:/Users/ekosbp/Documents/Personal/Binar-Academy/node_modules/.bin:/Users/ekosbp/Documents/Personal/node_modules/.bin:/Users/ekosbp/Documents/node_modules/.bin:/Users/ekosbp/node_modules/.bin:/Users/node_modules/.bin:/node_modules/.bin:/Users/ekosbp/.nvm/versions/node/v22.16.0/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/usr/local/opt/php@8.1/sbin:/usr/local/opt/php@8.1/bin:/usr/local/opt/php@8.0/sbin:/usr/local/opt/php@8.0/bin:/usr/local/opt/openjdk@17/bin:/Users/ekosbp/.nvm/versions/node/v22.16.0/bin:/usr/local/bin:/usr/local/sbin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/opt/php@8.1/sbin:/usr/local/opt/php@8.1/bin:/usr/local/opt/php@8.0/sbin:/usr/local/opt/php@8.0/bin:/usr/local/opt/openjdk@17/bin:/Users/ekosbp/.nvm/versions/node/v22.16.0/bin:/Users/ekosbp/.orbstack/bin:/Users/ekosbp/Library/Android/sdk/platform-tools:/Users/ekosbp/Library/Android/sdk/emulator:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/ekosbp/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand:/Users/ekosbp/Library/Android/sdk/platform-tools:/Users/ekosbp/Library/Android/sdk/emulator:/Applications/Visual Studio Code.app/Contents/Resources/app/bin",
+        "SHELL": "/bin/zsh",
+        "TERM": "xterm-256color",
+        "USER": "ekosbp"
+    }
+}
