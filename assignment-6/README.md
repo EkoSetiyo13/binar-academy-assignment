@@ -5,7 +5,9 @@ Folder `image-debugging` berisi kumpulan skrip dan dokumentasi yang digunakan un
 ## Struktur Folder
 
 - **project/**  
+  Berisi project mcp
 - **image-debugging/**  
+  Berisi hasil screenshot hasil debugging dan custom logging
 
 ## Fitur Utama
 
