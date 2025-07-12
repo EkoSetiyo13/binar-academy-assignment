@@ -4,14 +4,8 @@ Folder `image-debugging` berisi kumpulan skrip dan dokumentasi yang digunakan un
 
 ## Struktur Folder
 
-- **src/**  
-  Berisi kode sumber utama untuk proses debugging gambar, termasuk script untuk membaca, memproses, dan menganalisis gambar.
-
-- **test/**  
-  Berisi unit test untuk memastikan setiap fungsi berjalan dengan baik.
-
-- **assets/**  
-  Berisi contoh gambar yang digunakan untuk pengujian dan debugging.
+- **project/**  
+- **image-debugging/**  
 
 ## Fitur Utama
 
@@ -24,9 +18,6 @@ Folder `image-debugging` berisi kumpulan skrip dan dokumentasi yang digunakan un
 - **Logging proses debugging**  
   Setiap proses dan error yang terjadi selama debugging akan dicatat ke dalam log untuk memudahkan pelacakan.
 
-- **Unit testing**  
-  Seluruh fungsi utama telah dilengkapi dengan unit test untuk memastikan stabilitas dan keandalan.
-
 ## Cara Menggunakan
 
 1. **Install dependencies**
@@ -34,19 +25,15 @@ Folder `image-debugging` berisi kumpulan skrip dan dokumentasi yang digunakan un
    npm install
    ```
 
-2. **Jalankan script debugging**
+2. **Build**
    ```bash
-   npm run debug
+   npm run build
    ```
 
 3. **Cek hasil log**
-   - Log proses dan error dapat ditemukan di folder `logs/`.
+   - Log proses dan error dapat ditemukan di folder `build/`.
 
-## Catatan
-
-- Pastikan gambar yang diuji berada di folder `assets/`.
-- Untuk menambah format gambar baru, modifikasi file di `src/reader.ts`.
-
+_Ini adalah ringkasan otomatis berdasarkan isi folder `image-debugging`. Silakan cek setiap file untuk detail lebih lanjut._
 ---
 
 ### Pertanyaan: Apa masalah yang kamu temukan dan bagaimana cara menyelesaikannya?
@@ -59,4 +46,3 @@ Selain masalah path, saya juga menemukan error terkait environment variable yang
 
 ---
 
-_Ini adalah ringkasan otomatis berdasarkan isi folder `image-debugging`. Silakan cek setiap file untuk detail lebih lanjut._
