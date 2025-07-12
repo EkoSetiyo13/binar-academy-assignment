@@ -1,4 +1,5 @@
-# Assignment 6: Debugging Your MCP Integration
+# Modul 3 - Assignment 6 - Eko Setiyo Budi Purnomo
+## Assignment 6: Debugging Your MCP Integration
 
 Folder `image-debugging` berisi kumpulan skrip dan dokumentasi yang digunakan untuk melakukan debugging pada proses pengolahan gambar. Berikut adalah ringkasan dari isi dan fungsionalitas utama di dalam folder ini:
 

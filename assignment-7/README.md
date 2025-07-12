@@ -1,3 +1,4 @@
+## Modul 3 - Assignment 7 - Eko Setiyo Budi Purnomo
 # Gemini AI Personal Assistant
 
 Personal Assistant berbasis LLM Gemini + Langchain, dengan fitur memori percakapan (STM), todo list (LTM), dan tools sederhana.
