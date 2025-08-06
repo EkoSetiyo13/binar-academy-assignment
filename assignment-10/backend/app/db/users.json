@@ -1,0 +1,16 @@
+{
+  "admin": {
+    "id": "admin",
+    "username": "admin",
+    "email": "admin@example.com",
+    "hashed_password": "$2b$12$xjj.5pRxG5sGtdwkKkijcu6ODLQm.8qA20.Xk4DeNL87eO.6iS4l2",
+    "created_at": "2025-08-06T08:42:26.452001"
+  },
+  "test": {
+    "id": "0c275272-babf-495c-b113-27a712382736",
+    "username": "test",
+    "email": "test@example.com",
+    "hashed_password": "$2b$12$Ca5kdiisPpyDWxPWb8YireQXuXpHjbJiALZhM/851jC.Foi/5lLfu",
+    "created_at": "2025-08-06T01:42:27.007572"
+  }
+}

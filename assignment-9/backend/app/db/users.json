@@ -1,0 +1,23 @@
+{
+  "admin": {
+    "id": "admin",
+    "username": "admin",
+    "email": "admin@example.com",
+    "hashed_password": "$2b$12$6EI5BSa3JMeD1t.g8pyC.Ot6WRbXRDp5Cb9TWk2I4Uf5ApdLT1CfO",
+    "created_at": "2025-08-06T06:27:39.296727"
+  },
+  "testuser": {
+    "id": "2e325598-440e-4223-88ad-1b5c94ccc73b",
+    "username": "testuser",
+    "email": "test@example.com",
+    "hashed_password": "$2b$12$kEF/OMdsKZEQpmQ6E66Ub.YjBJSDMLWg8Zu3eGxRXF0whDLOMRBsC",
+    "created_at": "2025-08-06T06:28:49.731072"
+  },
+  "newuser": {
+    "id": "e9accb34-2b85-46ab-bf2d-a61b1cb1b086",
+    "username": "newuser",
+    "email": "new@example.com",
+    "hashed_password": "$2b$12$C9WAnCe7EhiWLCw466Ww3.BKKhUs0kVUDyWWZTabg3ikZFQ22fJMG",
+    "created_at": "2025-08-06T06:36:34.826291"
+  }
+}
