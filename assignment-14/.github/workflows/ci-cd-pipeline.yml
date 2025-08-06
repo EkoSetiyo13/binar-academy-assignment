@@ -1,0 +1,338 @@
+name: CI/CD Pipeline with Quality Gates
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  SONAR_HOST_URL: https://sonarcloud.io
+
+jobs:
+  # Backend Jobs
+  backend-lint:
+    name: Backend Lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-test.txt
+        
+    - name: Run Black (code formatting)
+      run: |
+        black --check --diff app/
+        
+    - name: Run isort (import sorting)
+      run: |
+        isort --check-only --diff app/
+        
+    - name: Run flake8 (linting)
+      run: |
+        flake8 app/ --max-line-length=88 --extend-ignore=E203,W503
+        
+    - name: Run Bandit (security linting)
+      run: |
+        bandit -r app/ -f json -o bandit-report.json || true
+
+  backend-test:
+    name: Backend Test
+    runs-on: ubuntu-latest
+    needs: backend-lint
+    defaults:
+      run:
+        working-directory: ./backend
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-test.txt
+        
+    - name: Run tests with coverage
+      run: |
+        pytest tests/ --cov=app --cov-report=xml --cov-report=html --cov-report=term-missing
+        
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./backend/coverage.xml
+        flags: backend
+        name: backend-coverage
+
+  backend-build:
+    name: Backend Build
+    runs-on: ubuntu-latest
+    needs: backend-test
+    defaults:
+      run:
+        working-directory: ./backend
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Build application
+      run: |
+        python -c "import app; print('Backend build successful')"
+        
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: backend-build
+        path: ./backend/app/
+        retention-days: 30
+
+  # Frontend Jobs
+  frontend-lint:
+    name: Frontend Lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run ESLint
+      run: npm run lint
+      
+    - name: Run TypeScript check
+      run: npx tsc --noEmit
+
+  frontend-test:
+    name: Frontend Test
+    runs-on: ubuntu-latest
+    needs: frontend-lint
+    defaults:
+      run:
+        working-directory: ./frontend
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run tests with coverage
+      run: npm run test:coverage
+      
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./frontend/coverage/lcov.info
+        flags: frontend
+        name: frontend-coverage
+
+  frontend-build:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+    needs: frontend-test
+    defaults:
+      run:
+        working-directory: ./frontend
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build application
+      run: npm run build
+      
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: frontend-build
+        path: ./frontend/dist/
+        retention-days: 30
+
+  # SonarCloud Analysis
+  sonarcloud-backend:
+    name: SonarCloud Backend Analysis
+    runs-on: ubuntu-latest
+    needs: [backend-test, backend-build]
+    defaults:
+      run:
+        working-directory: ./backend
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-test.txt
+        
+    - name: Run tests with coverage
+      run: |
+        pytest tests/ --cov=app --cov-report=xml --cov-report=html --cov-report=term-missing
+        
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+        args: >
+          -Dsonar.projectKey=your-org_assignment-14-backend
+          -Dsonar.organization=your-org
+          -Dsonar.sources=app
+          -Dsonar.tests=tests
+          -Dsonar.python.coverage.reportPaths=coverage.xml
+          -Dsonar.python.version=3.11
+          -Dsonar.qualitygate.wait=true
+          -Dsonar.qualitygate.failOnError=true
+
+  sonarcloud-frontend:
+    name: SonarCloud Frontend Analysis
+    runs-on: ubuntu-latest
+    needs: [frontend-test, frontend-build]
+    defaults:
+      run:
+        working-directory: ./frontend
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run tests with coverage
+      run: npm run test:coverage
+      
+    - name: Build application
+      run: npm run build
+      
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+        args: >
+          -Dsonar.projectKey=your-org_assignment-14-frontend
+          -Dsonar.organization=your-org
+          -Dsonar.sources=src
+          -Dsonar.tests=src
+          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+          -Dsonar.qualitygate.wait=true
+          -Dsonar.qualitygate.failOnError=true
+
+  # Quality Gate Check
+  quality-gate:
+    name: Quality Gate Check
+    runs-on: ubuntu-latest
+    needs: [sonarcloud-backend, sonarcloud-frontend]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Quality Gate Status
+      run: |
+        echo "✅ All quality gates passed!"
+        echo "Backend and Frontend analysis completed successfully"
+        echo "No new bugs or code smells detected"
+
+  # Deployment (Optional)
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: [quality-gate]
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: backend-build
+        
+    - name: Download frontend artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: frontend-build
+        
+    - name: Deploy to staging
+      run: |
+        echo "🚀 Deploying to staging environment..."
+        echo "Backend and Frontend builds are ready for deployment"
+        # Add your deployment commands here 
